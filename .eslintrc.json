@@ -1,0 +1,73 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "rules": {
+    "react/jsx-curly-newline": "off",
+    "react/require-default-props": "off",
+    // "react/jsx-one-expression-per-line": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "import/no-extraneous-dependencies": "off",
+    "jsx-a11y/iframe-has-title": "off",
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/no-danger": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/prop-types": "off",
+    "no-use-before-define": "off",
+    "prettier/prettier": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}

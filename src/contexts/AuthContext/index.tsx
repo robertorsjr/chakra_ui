@@ -16,26 +16,33 @@ type User = {
 type AuthContextType = {
   user: User | null;
   signed: boolean;
+  loading: boolean;
   signIn(): Promise<void>;
-  signOut: () => void;
+  signOut(): void;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const session = localStorage.getItem('session');
-    if (session) {
-      const parsedData = JSON.parse(session);
-      setUser(parsedData);
+    async function loadStorageData() {
+      const session = await localStorage.getItem('session');
+      if (session) {
+        setUser(JSON.parse(session));
+        // api.defaults.headers[Authorization] = `Bearer ${session.token}`
+      }
+      setLoading(false);
     }
+    loadStorageData();
   }, []);
 
   async function signIn() {
     const response = await signInPromise();
     setUser(response);
+    // api.defaults.headers[Authorization] = `Bearer ${response.token}`
     localStorage.setItem('session', JSON.stringify(response));
   }
 
@@ -45,7 +52,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ signed: !!user, user, loading, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

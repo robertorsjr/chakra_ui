@@ -1,10 +1,10 @@
 import { Route, Switch } from 'react-router-dom';
-import { Login } from '../pages';
+import { SignIn } from '../pages';
 
 function RoutesWithoutAuth() {
   return (
     <Switch>
-      <Route path="/" component={Login} exact />
+      <Route path="/" component={SignIn} exact />
     </Switch>
   );
 }

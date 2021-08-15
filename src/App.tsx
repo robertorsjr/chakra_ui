@@ -4,13 +4,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { chakraTheme } from './resources';
 import Routes from './routes';
 import { AuthContextProvider } from './contexts/AuthContext';
+import { Layout } from './components';
 
 function App() {
   return (
     <ChakraProvider theme={chakraTheme}>
       <BrowserRouter>
         <AuthContextProvider>
-          <Routes />
+          <Layout>
+            <Routes />
+          </Layout>
         </AuthContextProvider>
       </BrowserRouter>
     </ChakraProvider>

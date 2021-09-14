@@ -1,5 +1,12 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { signInPromise } from '../../services/auth';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 type AuthContextProviderProps = {
   children: ReactNode;
@@ -26,30 +33,39 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [token, setToken, clearToken] = useLocalStorage('session');
+
+  const recoverUserInformation = useCallback(async () => {
+    return signInPromise();
+  }, []);
+
+  const signOut = useCallback(() => {
+    // delete api.defaults.headers.Authorization
+    setUser(null);
+    clearToken();
+  }, [clearToken]);
 
   useEffect(() => {
     async function loadStorageData() {
-      const session = await localStorage.getItem('session');
-      if (session) {
-        setUser(JSON.parse(session));
-        // api.defaults.headers[Authorization] = `Bearer ${session.token}`
+      if (token) {
+        // api.defaults.headers[Authorization] = `Bearer ${token}`
+        const data = await recoverUserInformation();
+        setUser(data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        signOut();
       }
-      setLoading(false);
     }
     loadStorageData();
-  }, []);
+  }, [recoverUserInformation, token, signOut]);
 
-  async function signIn() {
+  const signIn = useCallback(async () => {
     const response = await signInPromise();
     setUser(response);
+    setToken(response.token);
     // api.defaults.headers[Authorization] = `Bearer ${response.token}`
-    localStorage.setItem('session', JSON.stringify(response));
-  }
-
-  function signOut() {
-    setUser(null);
-    localStorage.removeItem('session');
-  }
+  }, [setToken]);
 
   return (
     <AuthContext.Provider

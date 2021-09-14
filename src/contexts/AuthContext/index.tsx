@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { signInPromise } from '../../services/auth';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { SESSION_KEY } from '../../configs/env';
 
 type AuthContextProviderProps = {
   children: ReactNode;
@@ -33,7 +34,7 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [token, setToken, clearToken] = useLocalStorage('session');
+  const [token, setToken, clearToken] = useLocalStorage(SESSION_KEY);
 
   const recoverUserInformation = useCallback(async () => {
     return signInPromise();
